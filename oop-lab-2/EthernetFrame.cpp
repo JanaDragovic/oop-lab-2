@@ -112,5 +112,16 @@ EthernetFrame::~EthernetFrame()
     delete[] payload;
 }
 
+// funkcija koja racuna CRC dodatak
+int* EthernetFrame::addCRC(int payloadLength, int* payload)
+{
+    return crc.encodeWord(payloadLength, payload);
 
+}
+
+// funkcija koja proverava da li je CRC ispravno primljen
+int EthernetFrame::checkCRC(int frameLength, int* frame)
+{
+    return crc.checkSum(frameLength, frame);
+}
 

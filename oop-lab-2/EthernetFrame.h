@@ -18,5 +18,7 @@ public:
     EthernetFrame(char*, char*, int*, int*, CrcBlock&);
     EthernetFrame(EthernetFrame&);
     ~EthernetFrame();
+    int* addCRC(int, int*);
+    int checkCRC(int, int*);
 
 };
