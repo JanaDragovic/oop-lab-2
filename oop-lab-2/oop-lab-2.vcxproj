@@ -127,11 +127,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="CrcBlock.h" />
     <ClInclude Include="EthernetFrame.h" />
     <ClInclude Include="Polynomial.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="CrcBlock.cpp" />
     <ClCompile Include="EthernetFrame.cpp" />
     <ClCompile Include="main.cpp" />

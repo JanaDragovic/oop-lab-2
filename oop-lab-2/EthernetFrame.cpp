@@ -34,6 +34,7 @@ EthernetFrame::EthernetFrame() {
     for (int i = 0; i < 8; i++) {
         this->sfd[i] = i % 2 == 0 ? 1 : 0;
     }
+    sfd[7] = 1;
 }
 
 EthernetFrame::EthernetFrame(char* sourceMACprint, char* destinationMACprint, int* sourceMAC, int* destinationMAC, CrcBlock& crc) {
@@ -67,7 +68,7 @@ EthernetFrame::EthernetFrame(char* sourceMACprint, char* destinationMACprint, in
     for (int i = 0; i < 8; i++) {
         this->sfd[i] = i % 2 == 0 ? 1 : 0;
     }
-
+    sfd[7] = 1;
 
 
 }
@@ -103,13 +104,33 @@ EthernetFrame::EthernetFrame(EthernetFrame& frame){
     for (int i = 0; i < 8; i++) {
         this->sfd[i] = i % 2 == 0 ? 1 : 0;
     }
-
+    sfd[7] = 1;
 }
 
 // destruktor
 EthernetFrame::~EthernetFrame()
 {
     delete[] payload;
+}
+
+
+void EthernetFrame::setPayload(int payloadlength, int* payload) {
+
+    if (payloadLength != 0) {
+        delete[] payload;
+    }
+    else {
+
+        this->payloadLength = payloadLength;
+        this->payload = new int[payloadLength];
+
+        for (int i = 0; i < payloadLength; i++) {
+            this->payload[i] = payload[i];
+        }
+
+        frameLength = 8*26 + payloadLength;
+
+    }
 }
 
 // funkcija koja racuna CRC dodatak
@@ -119,9 +140,26 @@ int* EthernetFrame::addCRC(int payloadLength, int* payload)
 
 }
 
+
 // funkcija koja proverava da li je CRC ispravno primljen
 int EthernetFrame::checkCRC(int frameLength, int* frame)
 {
     return crc.checkSum(frameLength, frame);
+
+
 }
+
+// getteri koje se koriste za pozivanje CRC funkcija
+int EthernetFrame::getPayloadLength() {
+    return this->payloadLength;
+}
+
+int* EthernetFrame::getPayload() {
+    int* payloadtmp = new int[payloadLength];
+    for (int i = 0; i < payloadLength; ++i) {
+        payloadtmp[i] = payload[i];
+    }
+    return payloadtmp;
+}
+
 

@@ -18,7 +18,21 @@ public:
     EthernetFrame(char*, char*, int*, int*, CrcBlock&);
     EthernetFrame(EthernetFrame&);
     ~EthernetFrame();
+
+    void setPayload(int, int*);
+    int* getFrame();
+
     int* addCRC(int, int*);
+
+    void addPadding();
+
+    
+
+
     int checkCRC(int, int*);
+    void printEthernetInfo();
+
+    int getPayloadLength();
+    int* getPayload();
 
 };
