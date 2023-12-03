@@ -1,4 +1,5 @@
 ﻿#include "CrcBlock.h"
+#include "Config.h"
 
 class EthernetFrame
 {
@@ -27,12 +28,12 @@ public:
     void addPadding();
 
     
-
-
     int checkCRC(int, int*);
-    void printEthernetInfo();
+    void printEthernetInfo(Config&);
 
     int getPayloadLength();
     int* getPayload();
+
+    int getFrameLength();
 
 };

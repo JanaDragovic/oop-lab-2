@@ -1,6 +1,7 @@
 ﻿#include "EthernetFrame.h"
 
 
+
 // podrazumevani konstruktor 
 EthernetFrame::EthernetFrame() {
 
@@ -12,7 +13,7 @@ EthernetFrame::EthernetFrame() {
 
     for (int i = 0; i < 17; i++) {
         destinationMACprint[i] = '0';
-        sourceMAC[i] = '0';
+        sourceMACprint[i] = '0';
     }
 
     // crc inicijalizovan nula polinomom
@@ -87,6 +88,7 @@ EthernetFrame::EthernetFrame(EthernetFrame& frame){
         this->sourceMACprint[i] = frame.sourceMACprint[i];
     }
 
+
     // inicijalizacija CRC polinoma na osnovu drugog objekta
     this->crc = CrcBlock(frame.crc);
 
@@ -116,7 +118,7 @@ EthernetFrame::~EthernetFrame()
 
 void EthernetFrame::setPayload(int payloadlength, int* payload) {
 
-    if (payloadLength != 0) {
+    if (this->payloadLength != 0) {
         delete[] payload;
     }
     else {
@@ -133,6 +135,55 @@ void EthernetFrame::setPayload(int payloadlength, int* payload) {
     }
 }
 
+int* EthernetFrame::getFrame() {
+
+    int* frame = new int[frameLength];
+    int counter = 0;
+
+    // dodavanje polja preamble
+    for (int i = 0; i < 56; i++) {
+        frame[counter] = preamble[i];
+        counter++;
+    }
+
+    // dodavanje polja SFD
+    for (int i = 0; i < 8; i++) {
+        frame[counter] = sfd[i];
+        counter++;
+    }
+    // dodavanje destinacione MAC adrese
+    for (int i = 0; i < 48; i++) {
+        frame[counter] = destinationMAC[i];
+        counter++;
+    }
+
+    // dodavanje izvorisne MAC adrese
+    for (int i = 0; i < 48; i++) {
+        frame[counter] = sourceMAC[i];
+        counter++;
+    }
+
+    // dodavanje polja length
+    for (int i = 0; i < 16; i++) {
+        frame[counter] = this->payloadLength / (int)pow(2, 15 - i);
+        counter++;
+    }
+
+    // dodavanje polja payload
+    for (int i = 0; i < payloadLength; i++) {
+        frame[counter] = payload[i];
+        counter++;
+    }
+
+    // dodavanje CRC-a
+    int* crc = addCRC(payloadLength, payload);
+    for (int i = 0; i < payloadLength; i++) {
+        frame[counter] = crc[i];
+        counter++;
+    }
+
+    return frame;
+}
 // funkcija koja racuna CRC dodatak
 int* EthernetFrame::addCRC(int payloadLength, int* payload)
 {
@@ -140,14 +191,50 @@ int* EthernetFrame::addCRC(int payloadLength, int* payload)
 
 }
 
+void EthernetFrame::addPadding() {
+    if (payloadLength < 46) {
+        int* broadPayload = new int[46];
+        for (int i = 0; i < payloadLength; i++) {
+            broadPayload[i] = payload[i];
+        } 
+
+        for (int i = payloadLength; i < 46; i++) {
+            broadPayload[i] = 0;
+        }
+
+        delete[] payload;
+        payload = broadPayload;
+        payloadLength = 46;
+    
+    }
+    else {
+
+        payloadLength = payloadLength;
+    }
+}
 
 // funkcija koja proverava da li je CRC ispravno primljen
 int EthernetFrame::checkCRC(int frameLength, int* frame)
 {
     return crc.checkSum(frameLength, frame);
 
-
 }
+
+/*void EthernetFrame::printEthernetInfo() {
+
+    for (int i = 0; i < 17; i++) {
+        cout << destinationMACprint[i];
+    }
+
+    cout << endl;
+
+    for (int i = 0; i < 17; i++) {
+        cout << sourceMACprint[i];
+    }
+
+    cout << endl;
+    cout << frameLength << endl;
+} */
 
 // getteri koje se koriste za pozivanje CRC funkcija
 int EthernetFrame::getPayloadLength() {
@@ -162,4 +249,13 @@ int* EthernetFrame::getPayload() {
     return payloadtmp;
 }
 
+int EthernetFrame::getFrameLength() {
+    return frameLength;
+}
 
+void EthernetFrame::printEthernetInfo(Config& config)  {
+    std::cout << "Destination MAC address: " << config.getDestinationMACprint() << std::endl;
+    std::cout << "Source MAC address: " << config.getSourceMACprint() << std::endl;
+    std::cout << "Payload Length: " << payloadLength << " bytes" << std::endl;
+    // Add more information as needed
+}

@@ -19,6 +19,7 @@ public:
     int* getSourceMAC() const;
     CrcBlock& getCRC() const;
     void printConfig() const;
+ 
 };
 
 #endif
