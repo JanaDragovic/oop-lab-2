@@ -220,23 +220,6 @@ int EthernetFrame::checkCRC(int frameLength, int* frame)
 
 }
 
-/*void EthernetFrame::printEthernetInfo() {
-
-    for (int i = 0; i < 17; i++) {
-        cout << destinationMACprint[i];
-    }
-
-    cout << endl;
-
-    for (int i = 0; i < 17; i++) {
-        cout << sourceMACprint[i];
-    }
-
-    cout << endl;
-    cout << frameLength << endl;
-} */
-
-// getteri koje se koriste za pozivanje CRC funkcija
 int EthernetFrame::getPayloadLength() {
     return this->payloadLength;
 }
@@ -257,5 +240,5 @@ void EthernetFrame::printEthernetInfo(Config& config)  {
     std::cout << "Destination MAC address: " << config.getDestinationMACprint() << std::endl;
     std::cout << "Source MAC address: " << config.getSourceMACprint() << std::endl;
     std::cout << "Payload Length: " << payloadLength << " bytes" << std::endl;
-    // Add more information as needed
+    
 }

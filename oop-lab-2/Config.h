@@ -3,23 +3,36 @@
 
 #include "CrcBlock.h"
 
-class Config
-{
+class Config {
+private: 
+
     char destinationMACprint[17];
     char sourceMACprint[17];
     int destinationMAC[48];
     int sourceMAC[48];
     CrcBlock crc;
 
-public:
-    Config();
+    
+
+public: 
+	Config();
     char* getDestinationMACprint() const;
     char* getSourceMACprint() const;
     int* getDestinationMAC() const;
     int* getSourceMAC() const;
     CrcBlock& getCRC() const;
-    void printConfig() const;
- 
+
 };
 
-#endif
+
+
+
+
+
+
+
+
+
+
+
+#endif 

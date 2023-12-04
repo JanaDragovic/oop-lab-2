@@ -15,25 +15,20 @@ class EthernetFrame
     int sfd[8];
 
 public:
-    EthernetFrame(); // podrazumevani konstruktor
-    EthernetFrame(char*, char*, int*, int*, CrcBlock&);
-    EthernetFrame(EthernetFrame&);
-    ~EthernetFrame();
+    EthernetFrame(); 
+    EthernetFrame(char*, char*, int*, int*, CrcBlock&); 
+    EthernetFrame(EthernetFrame&); 
+    ~EthernetFrame(); 
 
     void setPayload(int, int*);
     int* getFrame();
-
     int* addCRC(int, int*);
-
     void addPadding();
-
-    
     int checkCRC(int, int*);
     void printEthernetInfo(Config&);
 
     int getPayloadLength();
     int* getPayload();
-
     int getFrameLength();
 
 };
