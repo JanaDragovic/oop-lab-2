@@ -1,7 +1,6 @@
 ﻿#include "EthernetFrame.h"
 
 
-
 // podrazumevani konstruktor 
 EthernetFrame::EthernetFrame() {
 
@@ -42,18 +41,17 @@ EthernetFrame::EthernetFrame(char* sourceMACprint, char* destinationMACprint, in
 
     // inicijalizacija odredisne i izvorisne MAC adrese prosledjenim objektom
     for (int i = 0; i < 48; i++) {
-        this->destinationMAC[i] = this->destinationMAC[i];
-        this->sourceMAC[i] = this->sourceMAC[i];
+        this->destinationMAC[i] = destinationMAC[i];
+        this->sourceMAC[i] = sourceMAC[i];
     }
 
     for (int i = 0; i < 17; i++) {
-        this->destinationMACprint[i] = this->destinationMACprint[i];
-        this->sourceMACprint[i] = this->sourceMACprint[i];
+        this->destinationMACprint[i] = destinationMACprint[i];
+        this->sourceMACprint[i] = sourceMACprint[i];
     }
 
     // inicijalizacija CRC polinoma prosledjenim objektom
     this->crc = CrcBlock(crc);
-
 
     // prazno payload polje
     this->payloadLength = 0;
@@ -70,8 +68,6 @@ EthernetFrame::EthernetFrame(char* sourceMACprint, char* destinationMACprint, in
         this->sfd[i] = i % 2 == 0 ? 1 : 0;
     }
     sfd[7] = 1;
-
-
 }
 
 // copy konstruktor
@@ -87,7 +83,6 @@ EthernetFrame::EthernetFrame(EthernetFrame& frame){
         this->destinationMACprint[i] = frame.destinationMACprint[i];
         this->sourceMACprint[i] = frame.sourceMACprint[i];
     }
-
 
     // inicijalizacija CRC polinoma na osnovu drugog objekta
     this->crc = CrcBlock(frame.crc);
@@ -188,7 +183,6 @@ int* EthernetFrame::getFrame() {
 int* EthernetFrame::addCRC(int payloadLength, int* payload)
 {
     return crc.encodeWord(payloadLength, payload);
-
 }
 
 void EthernetFrame::addPadding() {
@@ -208,7 +202,6 @@ void EthernetFrame::addPadding() {
     
     }
     else {
-
         payloadLength = payloadLength;
     }
 }
@@ -217,7 +210,6 @@ void EthernetFrame::addPadding() {
 int EthernetFrame::checkCRC(int frameLength, int* frame)
 {
     return crc.checkSum(frameLength, frame);
-
 }
 
 int EthernetFrame::getPayloadLength() {
